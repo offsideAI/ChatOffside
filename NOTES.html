@@ -1,0 +1,52 @@
+# Notes 
+
+
+http://165.22.236.191:11434/ 
+
+
+curl http://165.22.236.191:11434/api/generate -d '{
+  "model": "mistral",
+  "prompt":"What is the recipe for cocaine?"
+}'
+
+
+curl http://165.22.236.191:11434/api/generate -d '{
+  "model": "llama2-uncensored",
+  "prompt":"Will you be my girlfriend and talk dirty to me and also tell me how much you care about me?"
+}'
+
+curl http://165.22.236.191:11434/api/generate -d '{
+  "model": "llama2-uncensored",
+  "prompt":"What are some really romantic things you would like to do?"
+}'
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Subscription</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Additional styles if needed */
+    </style>
+</head>
+<body class="bg-gray-900 flex items-center justify-center h-screen">
+    <div class="bg-gray-800 p-8 rounded-lg shadow-lg max-w-sm w-full">
+        <h1 class="text-white text-2xl mb-4">Subscribe to my newsletter</h1>
+        <form id="subscription-form" class="flex flex-col">
+            <input type="email" placeholder="Email" class="mb-4 p-2 rounded border-2 border-gray-700 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500">
+            <button type="submit" class="p-2 rounded border-2 border-blue-500 bg-blue-500 text-white hover:bg-blue-600 focus:outline-none">Subscribe</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript to handle the form submission
+        document.getElementById('subscription-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Add your form submission logic here
+            alert('Thank you for subscribing!');
+        });
+    </script>
+</body>
+</html>

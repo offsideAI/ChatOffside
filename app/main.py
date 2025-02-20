@@ -9,7 +9,7 @@ from starlette.requests import Request
 from starlette.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
-from router import post, prompt, project, profession, user, authentication
+from router import post, prompt, project, profession, user, authentication, offsideai
 from typing import List
 
 import models
@@ -28,7 +28,8 @@ ALGORITHM = os.environ.get("ALGORITHM")
 ###############################################################################
 # app = FastAPI()
 app = FastAPI(title ="ChatOffside API", version="0.1.0")
-app.mount("/.well-known/", StaticFiles(directory="static"), name="static")
+
+app.mount("/api", StaticFiles(directory="static", html=True), name="static")
 
 #We define authorizations for middleware components
 app.add_middleware(
@@ -106,7 +107,7 @@ admin.add_view(PromptAdmin)
 
 @app.get('/')
 def index():
-    return 'ChatOffside'
+    return 'ChatOffside API'
 
 
 app.include_router(authentication.router)
@@ -115,6 +116,7 @@ app.include_router(prompt.router)
 app.include_router(project.router)
 app.include_router(profession.router)
 app.include_router(user.router)
+app.include_router(offsideai.router)
 
 ###############################################################################
 

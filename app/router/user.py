@@ -22,8 +22,16 @@ def create_user(
     session: Session = Depends(database.get_session),
     user: models.UserCreate
 ):
-    # db_user = models.User(name = user.name, email = user.email, password = Hash.bcrypt(user.password))
-    db_user = models.User.from_orm(user)
+    # Hash the password
+    hashed_password = Hash.bcrypt(user.password)
+    
+    # Create a new User instance with the hashed password
+    db_user = models.User(
+        name=user.name, 
+        email=user.email, 
+        password=hashed_password
+    )
+    
     session.add(db_user)
     session.commit()
     session.refresh(db_user)
@@ -61,11 +69,13 @@ def update_user(
     db_user = session.get(models.User, user_id)
     if not db_user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id {user_id} not found")
-    db_user = models.UserBase(name = user.name, email = user.email, password = Hash.bcrypt(user.password))
-    # user_data = user.dict(exclude_unset=True)
-    #for key, value in user_data.items():
-    #    setattr(db_user, key, value)
-    session.add(db_user)
+    
+    user_data = user.dict(exclude_unset=True)
+    for key, value in user_data.items():
+        if key == 'password':  # Hash the password if it's being updated
+            value = Hash.bcrypt(value)
+        setattr(db_user, key, value)
+        
     session.commit()
     session.refresh(db_user)
     return db_user

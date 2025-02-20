@@ -1,0 +1,1197 @@
+openapi: 3.0.2
+info:
+  title: ChatOffside API
+  version: 0.1.0
+paths:
+  /:
+    get:
+      summary: Index
+      operationId: index__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /login:
+    post:
+      tags:
+      - Authentication
+      summary: Login
+      operationId: login_login_post
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Body_login_login_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /posts/:
+    post:
+      tags:
+      - Posts
+      summary: Create Post
+      operationId: create_post_posts__post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /posts:
+    get:
+      tags:
+      - Posts
+      summary: Read Posts
+      operationId: read_posts_posts_get
+      parameters:
+      - required: false
+        schema:
+          title: Offset
+          type: integer
+          default: 0
+        name: offset
+        in: query
+      - required: false
+        schema:
+          title: Limit
+          type: integer
+          default: 100
+          lte: 100
+        name: limit
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                title: Response Read Posts Posts Get
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /posts/{post_id}:
+    get:
+      tags:
+      - Posts
+      summary: Read Post
+      operationId: read_post_posts__post_id__get
+      parameters:
+      - required: true
+        schema:
+          title: Post Id
+          type: integer
+        name: post_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostReadWithUser'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+    delete:
+      tags:
+      - Posts
+      summary: Delete Post
+      operationId: delete_post_posts__post_id__delete
+      parameters:
+      - required: true
+        schema:
+          title: Post Id
+          type: integer
+        name: post_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+    patch:
+      tags:
+      - Posts
+      summary: Update Post
+      operationId: update_post_posts__post_id__patch
+      parameters:
+      - required: true
+        schema:
+          title: Post Id
+          type: integer
+        name: post_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /prompts/:
+    post:
+      tags:
+      - Prompts
+      summary: Create Prompt
+      operationId: create_prompt_prompts__post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromptCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /prompts:
+    get:
+      tags:
+      - Prompts
+      summary: Read Prompts
+      operationId: read_prompts_prompts_get
+      parameters:
+      - required: false
+        schema:
+          title: Offset
+          type: integer
+          default: 0
+        name: offset
+        in: query
+      - required: false
+        schema:
+          title: Limit
+          type: integer
+          default: 100
+          lte: 100
+        name: limit
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                title: Response Read Prompts Prompts Get
+                type: array
+                items:
+                  $ref: '#/components/schemas/PromptRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /prompts/{prompt_id}:
+    get:
+      tags:
+      - Prompts
+      summary: Read Prompt
+      operationId: read_prompt_prompts__prompt_id__get
+      parameters:
+      - required: true
+        schema:
+          title: Prompt Id
+          type: integer
+        name: prompt_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptReadWithUser'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+    delete:
+      tags:
+      - Prompts
+      summary: Delete Prompt
+      operationId: delete_prompt_prompts__prompt_id__delete
+      parameters:
+      - required: true
+        schema:
+          title: Prompt Id
+          type: integer
+        name: prompt_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+    patch:
+      tags:
+      - Prompts
+      summary: Update Prompt
+      operationId: update_prompt_prompts__prompt_id__patch
+      parameters:
+      - required: true
+        schema:
+          title: Prompt Id
+          type: integer
+        name: prompt_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromptUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /professions/:
+    post:
+      tags:
+      - Professions
+      summary: Create Profession
+      operationId: create_profession_professions__post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfessionCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfessionRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /professions:
+    get:
+      tags:
+      - Professions
+      summary: Read Professions
+      operationId: read_professions_professions_get
+      parameters:
+      - required: false
+        schema:
+          title: Offset
+          type: integer
+          default: 0
+        name: offset
+        in: query
+      - required: false
+        schema:
+          title: Limit
+          type: integer
+          default: 100
+          lte: 100
+        name: limit
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                title: Response Read Professions Professions Get
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProfessionRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /professions/{profession_id}:
+    get:
+      tags:
+      - Professions
+      summary: Read Profession
+      operationId: read_profession_professions__profession_id__get
+      parameters:
+      - required: true
+        schema:
+          title: Profession Id
+          type: integer
+        name: profession_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfessionReadWithUser'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+    delete:
+      tags:
+      - Professions
+      summary: Delete Profession
+      operationId: delete_profession_professions__profession_id__delete
+      parameters:
+      - required: true
+        schema:
+          title: Profession Id
+          type: integer
+        name: profession_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+    patch:
+      tags:
+      - Professions
+      summary: Update Profession
+      operationId: update_profession_professions__profession_id__patch
+      parameters:
+      - required: true
+        schema:
+          title: Profession Id
+          type: integer
+        name: profession_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfessionUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfessionRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /users/:
+    get:
+      tags:
+      - Users
+      summary: Read Users
+      operationId: read_users_users__get
+      parameters:
+      - required: false
+        schema:
+          title: Offset
+          type: integer
+          default: 0
+        name: offset
+        in: query
+      - required: false
+        schema:
+          title: Limit
+          type: integer
+          default: 100
+          lte: 100
+        name: limit
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                title: Response Read Users Users  Get
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Users
+      summary: Create User
+      operationId: create_user_users__post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /users/{user_id}:
+    get:
+      tags:
+      - Users
+      summary: Read User
+      operationId: read_user_users__user_id__get
+      parameters:
+      - required: true
+        schema:
+          title: User Id
+          type: integer
+        name: user_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserReadWithPosts'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Users
+      summary: Delete User
+      operationId: delete_user_users__user_id__delete
+      parameters:
+      - required: true
+        schema:
+          title: User Id
+          type: integer
+        name: user_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Users
+      summary: Update User
+      operationId: update_user_users__user_id__patch
+      parameters:
+      - required: true
+        schema:
+          title: User Id
+          type: integer
+        name: user_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+        required: true
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /offsideai/jsonfunctioncalling:
+    get:
+      tags:
+      - offsidei
+      summary: Dojsonfunctioncalling
+      operationId: dojsonfunctioncalling_offsideai_jsonfunctioncalling_get
+      parameters:
+      - description: The content to send to the OpenAI model
+        required: true
+        schema:
+          title: Query
+          type: string
+          description: The content to send to the OpenAI model
+        name: query
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /offsideai/functioncalling:
+    get:
+      tags:
+      - offsidei
+      summary: Dofunctioncalling
+      operationId: dofunctioncalling_offsideai_functioncalling_get
+      parameters:
+      - description: The content to send to the OffsideAI model
+        required: true
+        schema:
+          title: Query
+          type: string
+          description: The content to send to the OffsideAI model
+        name: query
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /offsideai/vision:
+    post:
+      tags:
+      - offsidei
+      summary: Dovisionmagic
+      operationId: dovisionmagic_offsideai_vision_post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_dovisionmagic_offsideai_vision_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /offsideai/urlvision:
+    get:
+      tags:
+      - offsidei
+      summary: Dourlvisionmagic
+      operationId: dourlvisionmagic_offsideai_urlvision_get
+      parameters:
+      - description: The url of the file
+        required: true
+        schema:
+          title: Imageurl
+          type: string
+          description: The url of the file
+        name: imageurl
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /offsideai/docvision:
+    get:
+      tags:
+      - offsidei
+      summary: Dodocumentmagic
+      operationId: dodocumentmagic_offsideai_docvision_get
+      parameters:
+      - description: The url of the file
+        required: true
+        schema:
+          title: Imageurl
+          type: string
+          description: The url of the file
+        name: imageurl
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    Body_dovisionmagic_offsideai_vision_post:
+      title: Body_dovisionmagic_offsideai_vision_post
+      required:
+      - image
+      type: object
+      properties:
+        image:
+          title: Image
+          type: string
+          description: Image file to be processed
+          format: binary
+    Body_login_login_post:
+      title: Body_login_login_post
+      required:
+      - username
+      - password
+      type: object
+      properties:
+        grant_type:
+          title: Grant Type
+          pattern: password
+          type: string
+        username:
+          title: Username
+          type: string
+        password:
+          title: Password
+          type: string
+        scope:
+          title: Scope
+          type: string
+          default: ''
+        client_id:
+          title: Client Id
+          type: string
+        client_secret:
+          title: Client Secret
+          type: string
+    HTTPValidationError:
+      title: HTTPValidationError
+      type: object
+      properties:
+        detail:
+          title: Detail
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    PostCreate:
+      title: PostCreate
+      required:
+      - title
+      - body
+      type: object
+      properties:
+        title:
+          title: Title
+          type: string
+        body:
+          title: Body
+          type: string
+        author_id:
+          title: Author Id
+          type: integer
+    PostRead:
+      title: PostRead
+      required:
+      - title
+      - body
+      type: object
+      properties:
+        title:
+          title: Title
+          type: string
+        body:
+          title: Body
+          type: string
+        author_id:
+          title: Author Id
+          type: integer
+        id:
+          title: Id
+          type: integer
+    PostReadWithUser:
+      title: PostReadWithUser
+      required:
+      - title
+      - body
+      type: object
+      properties:
+        title:
+          title: Title
+          type: string
+        body:
+          title: Body
+          type: string
+        author_id:
+          title: Author Id
+          type: integer
+        id:
+          title: Id
+          type: integer
+        author:
+          $ref: '#/components/schemas/UserRead'
+    PostUpdate:
+      title: PostUpdate
+      type: object
+      properties:
+        id:
+          title: Id
+          type: string
+        title:
+          title: Title
+          type: string
+        body:
+          title: Body
+          type: string
+        author_id:
+          title: Author Id
+          type: integer
+    ProfessionCreate:
+      title: ProfessionCreate
+      required:
+      - title
+      - description
+      type: object
+      properties:
+        title:
+          title: Title
+          type: string
+        description:
+          title: Description
+          type: string
+        users:
+          title: Users
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    ProfessionRead:
+      title: ProfessionRead
+      required:
+      - title
+      - description
+      type: object
+      properties:
+        title:
+          title: Title
+          type: string
+        description:
+          title: Description
+          type: string
+        id:
+          title: Id
+          type: string
+        users:
+          title: Users
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    ProfessionReadWithUser:
+      title: ProfessionReadWithUser
+      required:
+      - title
+      - description
+      type: object
+      properties:
+        title:
+          title: Title
+          type: string
+        description:
+          title: Description
+          type: string
+        id:
+          title: Id
+          type: string
+        users:
+          title: Users
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    ProfessionUpdate:
+      title: ProfessionUpdate
+      type: object
+      properties:
+        id:
+          title: Id
+          type: string
+        title:
+          title: Title
+          type: string
+        description:
+          title: Description
+          type: string
+        users:
+          title: Users
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PromptCreate:
+      title: PromptCreate
+      required:
+      - title
+      - body
+      type: object
+      properties:
+        title:
+          title: Title
+          type: string
+        body:
+          title: Body
+          type: string
+        author_id:
+          title: Author Id
+          type: integer
+    PromptRead:
+      title: PromptRead
+      required:
+      - title
+      - body
+      type: object
+      properties:
+        title:
+          title: Title
+          type: string
+        body:
+          title: Body
+          type: string
+        author_id:
+          title: Author Id
+          type: integer
+        id:
+          title: Id
+          type: integer
+    PromptReadWithUser:
+      title: PromptReadWithUser
+      required:
+      - title
+      - body
+      type: object
+      properties:
+        title:
+          title: Title
+          type: string
+        body:
+          title: Body
+          type: string
+        author_id:
+          title: Author Id
+          type: integer
+        id:
+          title: Id
+          type: integer
+        author:
+          $ref: '#/components/schemas/UserRead'
+    PromptUpdate:
+      title: PromptUpdate
+      type: object
+      properties:
+        id:
+          title: Id
+          type: string
+        title:
+          title: Title
+          type: string
+        body:
+          title: Body
+          type: string
+        author_id:
+          title: Author Id
+          type: integer
+    User:
+      title: User
+      required:
+      - name
+      - email
+      - password
+      type: object
+      properties:
+        name:
+          title: Name
+          type: string
+        email:
+          title: Email
+          type: string
+        password:
+          title: Password
+          type: string
+        profession_id:
+          title: Profession Id
+          type: integer
+        id:
+          title: Id
+          type: integer
+    UserCreate:
+      title: UserCreate
+      required:
+      - name
+      - email
+      - password
+      type: object
+      properties:
+        name:
+          title: Name
+          type: string
+        email:
+          title: Email
+          type: string
+        password:
+          title: Password
+          type: string
+        profession_id:
+          title: Profession Id
+          type: integer
+    UserRead:
+      title: UserRead
+      required:
+      - name
+      - email
+      - password
+      - id
+      type: object
+      properties:
+        name:
+          title: Name
+          type: string
+        email:
+          title: Email
+          type: string
+        password:
+          title: Password
+          type: string
+        profession_id:
+          title: Profession Id
+          type: integer
+        id:
+          title: Id
+          type: integer
+    UserReadWithPosts:
+      title: UserReadWithPosts
+      required:
+      - name
+      - email
+      - password
+      - id
+      type: object
+      properties:
+        name:
+          title: Name
+          type: string
+        email:
+          title: Email
+          type: string
+        password:
+          title: Password
+          type: string
+        profession_id:
+          title: Profession Id
+          type: integer
+        id:
+          title: Id
+          type: integer
+        posts:
+          title: Posts
+          type: array
+          items:
+            $ref: '#/components/schemas/PostRead'
+          default: []
+        prompts:
+          title: Prompts
+          type: array
+          items:
+            $ref: '#/components/schemas/PostRead'
+          default: []
+    UserUpdate:
+      title: UserUpdate
+      type: object
+      properties:
+        id:
+          title: Id
+          type: integer
+        name:
+          title: Name
+          type: string
+        email:
+          title: Email
+          type: string
+        password:
+          title: Password
+          type: string
+    ValidationError:
+      title: ValidationError
+      required:
+      - loc
+      - msg
+      - type
+      type: object
+      properties:
+        loc:
+          title: Location
+          type: array
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      flows:
+        password:
+          scopes: {}
+          tokenUrl: login
