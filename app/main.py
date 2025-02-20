@@ -9,7 +9,14 @@ from starlette.requests import Request
 from starlette.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
-from router import post, prompt, project, profession, user, authentication, offsideai
+from router import post
+from router import prompt
+from router import project
+from router import profession
+from router import user
+from router import authentication
+from router import offsideai
+from router import currency
 from typing import List
 
 import models
@@ -18,6 +25,7 @@ from sqlalchemy.orm import Session
 from hashing import Hash
 
 from fastapi.middleware.cors import CORSMiddleware
+
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -117,6 +125,7 @@ app.include_router(project.router)
 app.include_router(profession.router)
 app.include_router(user.router)
 app.include_router(offsideai.router)
+app.include_router(currency.router)
 
 ###############################################################################
 
