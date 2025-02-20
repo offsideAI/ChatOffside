@@ -84,7 +84,7 @@ async def dovisionmagic(
     base64_image = base64.b64encode(image_content).decode('utf-8')
     query: str = "What's in this image?"
     response = client.chat.completions.create(
-        model="gpt-4-vision-preview",
+        model="gpt-4o-mini",
         messages = [
             {
                 "role": "user",
