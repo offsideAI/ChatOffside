@@ -56,8 +56,11 @@ app.add_middleware(
 #When the API is starting
 @app.on_event("startup")
 def on_startup():
-    print("Calling Created DB and Tables")
-    create_db_and_tables()
+    if os.environ.get("ENV") == "development":
+        print("Development environment: Creating DB and Tables")
+        create_db_and_tables()
+    else:
+        print("Production environment: Skipping automatic table creation")
 
 ###############################################################################
 class AdminAuth(AuthenticationBackend):
