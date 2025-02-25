@@ -37,6 +37,7 @@ myvenv/: Python virtual environment directory
 .gitignore: Git ignore rules
 The project follows a typical FastAPI application structure with clear separation of concerns:
 
+### Structure
 Routes are separated into the router directory
 Database models are defined in models.py
 Business logic is organized in the repository pattern
