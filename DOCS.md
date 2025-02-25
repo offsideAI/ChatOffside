@@ -1,4 +1,4 @@
-#Docs
+# Docs
 ChatOffside is a chatbot and project management application built using the SKAP Stack (SvelteKit - FastAPI - Postgres). Here's the project structure breakdown:
 
 ## Root Directory:
@@ -138,3 +138,22 @@ Return the created user information (excluding the password)
 The response will be in JSON format and include the user's ID and other non-sensitive information.
 
 Note that after registration, you'll need to use the /login endpoint with your email and password to get an access token for authenticated requests.
+
+### 6. Initialize the Database
+
+Run the database migrations:
+
+```bash
+# Make sure you're in the app directory
+cd app
+alembic upgrade head
+```
+
+### 7. Run the Development Server
+
+```bash
+# Make sure you're in the app directory
+uvicorn main:app --reload
+```
+
+The API will be available at `http://localhost:8000`
