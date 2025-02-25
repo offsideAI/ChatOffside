@@ -23,9 +23,13 @@ import models
 from database import SessionLocal, engine, get_db, create_db_and_tables
 from sqlalchemy.orm import Session
 from hashing import Hash
-
+import jwt
 from fastapi.middleware.cors import CORSMiddleware
-
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import jwt, JWTError
+from datetime import datetime, timedelta
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -61,14 +65,34 @@ class AdminAuth(AuthenticationBackend):
         form = await request.form()
         username, password = form["username"], form["password"]
 
-        # Validate username/password credentials
-        # And update session
-        request.session.update({"token": "..."})
+        # Get database session
+        async with SessionLocal() as session:
+            # Find user by email
+            user = session.query(models.User).filter(models.User.email == username).first()
+            
+            if not user:
+                return False
+                
+            # Verify password
+            if not Hash.verify(password, user.password):
+                return False
+                
+            # Check if user has admin role (you should add an is_admin field to User model)
+            if not user.is_admin:
+                return False
 
-        return True
+            # Generate JWT token
+            access_token = jwt.encode({
+                "sub": user.email,
+                "role": "admin",
+                "exp": datetime.utcnow() + timedelta(minutes=30)
+            }, SECRET_KEY, algorithm=ALGORITHM)
+            
+            # Store token in session
+            request.session.update({"token": access_token})
+            return True
 
     async def logout(self, request: Request) -> bool:
-        # Usually you'd want to just clear the session
         request.session.clear()
         return True
 
@@ -78,8 +102,25 @@ class AdminAuth(AuthenticationBackend):
         if not token:
             return RedirectResponse(request.url_for("admin:login"), status_code=302)
 
-        # Check the token in depth
-
+        try:
+            # Verify and decode the token
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            email = payload.get("sub")
+            role = payload.get("role")
+            
+            # Ensure it's an admin token
+            if not email or role != "admin":
+                return RedirectResponse(request.url_for("admin:login"), status_code=302)
+                
+            # Verify user still exists and is admin
+            async with SessionLocal() as session:
+                user = session.query(models.User).filter(models.User.email == email).first()
+                if not user or not user.is_admin:
+                    return RedirectResponse(request.url_for("admin:login"), status_code=302)
+                    
+        except jwt.PyJWTError:
+            return RedirectResponse(request.url_for("admin:login"), status_code=302)
+{{ ... }}
 
 authentication_backend = AdminAuth(secret_key=SECRET_KEY)
 admin = Admin(app=app, engine=engine, authentication_backend=authentication_backend)
@@ -128,7 +169,3 @@ app.include_router(offsideai.router)
 app.include_router(currency.router)
 
 ###############################################################################
-
-###############################################################################
-
-

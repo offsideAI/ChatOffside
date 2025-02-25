@@ -54,6 +54,7 @@ class UserBase(SQLModel):
     email: str
     password: str
     profession_id: Optional[int] = Field(default=None, foreign_key="profession.id")
+    is_admin: bool = Field(default=False)
 
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -73,6 +74,7 @@ class UserUpdate(SQLModel):
     name: Optional[str] = None
     email: Optional[str] = None
     password: Optional[str] = None
+    is_admin: Optional[bool] = None
 
 # User.update_forward_refs()
 ###############################################################################
