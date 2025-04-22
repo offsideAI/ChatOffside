@@ -317,6 +317,8 @@ alembic revision --autogenerate -m "Removed tags from Post user model"
 
 alembic revision --autogenerate -m "Added Prompt dataclass to models"
 
+alembic revision --autogenerate -m "add is_admin to user model"
+
 alembic upgrade heads
 ```
 
