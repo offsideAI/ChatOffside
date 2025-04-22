@@ -122,7 +122,7 @@ async def dourlvisionmagic(
     # Read the image file and convert it to BASE64
     query: str = "What's in this image?"
     response = client.chat.completions.create(
-        model="gpt-4-vision-preview",
+        model="gpt-4o",
         messages = [
             {
                 "role": "user",
@@ -162,7 +162,7 @@ async def dodocumentmagic(
     # Read the image file and convert it to BASE64
     query: str = "Can you take the contents of this image and explain all the details and also interpret and summarize the information and suggest steps?"
     response = client.chat.completions.create(
-        model="gpt-4-vision-preview",
+        model="gpt-4o",
         messages = [
             {
                 "role": "user",
@@ -201,7 +201,7 @@ async def dovisioncountermagic(
     # Read the image file and convert it to BASE64
     query: str = "Can you take the contents of this image and count the number of items in the image? Just return the number and the item name"
     response = client.chat.completions.create(
-        model="gpt-4-vision-preview",
+        model="gpt-4o",
         messages = [
             {
                 "role": "user",
@@ -240,7 +240,7 @@ async def dovisionhashtagsmagic(
     # Read the image file and convert it to BASE64
     query: str = "Can you take the contents of this image and generate a list of 15 relevant hashtags. Focus on capturing the key themes and elements present in the image. Ensure the hashtags are suitable for use on social media platforms like Instagram and Twitter, emphasizing salient items in the image. Present the hashtags in a clear, space-seperated list, with no numbering. "
     response = client.chat.completions.create(
-        model="gpt-4-vision-preview",
+        model="gpt-4o",
         messages = [
             {
                 "role": "user",
