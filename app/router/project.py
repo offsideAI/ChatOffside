@@ -8,81 +8,81 @@ from sqlmodel import Field, Relationship, Session, SQLModel, create_engine, sele
 import oauth2
 
 router = APIRouter(
-    tags = ['Prompts']
+    tags = ['Projects']
 )
 
 ###############################################################################
-## Prompt
+## Project
 
-@router.post('/prompts/', response_model=models.PromptRead)
-def create_prompt(
+@router.post('/projects/', response_model=models.ProjectRead)
+def create_project(
     *,
     session: Session = Depends(database.get_session),
     current_user: models.User = Depends(oauth2.get_current_user),
-    prompt: models.PromptCreate
+    project: models.ProjectCreate
 ):
-    db_prompt = models.Prompt.from_orm(prompt)
-    session.add(db_prompt)
+    db_project = models.Project.from_orm(project)
+    session.add(db_project)
     session.commit()
-    session.refresh(db_prompt)
-    return prompt
+    session.refresh(db_project)
+    return project
 
-@router.get('/prompts', response_model=List[models.PromptRead])
-def read_prompts(
+@router.get('/projects', response_model=List[models.ProjectRead])
+def read_projects(
     *,
     session: Session = Depends(database.get_session),
     current_user: models.User = Depends(oauth2.get_current_user),
     offset: int = 0,
     limit: int = Query(default=100, lte=100),
 ):
-    # prompts = session.exec(select(models.Prompt).offset(offset).limit(limit)).all()
-    prompts = session.query(models.Prompt).filter(models.Prompt.author_id == current_user.id).offset(offset).limit(limit).all()
-    return prompts
+    # projects = session.exec(select(models.Project).offset(offset).limit(limit)).all()
+    projects = session.query(models.Project).filter(models.Project.author_id == current_user.id).offset(offset).limit(limit).all()
+    return projects
 
-@router.get('/prompts/{prompt_id}', response_model=models.PromptReadWithUser)
-def read_prompt(
+@router.get('/projects/{project_id}', response_model=models.ProjectReadWithUser)
+def read_project(
     *,
     session: Session = Depends(database.get_session),
     current_user: models.User = Depends(oauth2.get_current_user),
-    prompt_id: int
+    project_id: int
 ):
-    prompt = session.get(models.Prompt, prompt_id)
-    if not prompt:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Prompt with id {prompt_id} is not available")
-    return prompt
+    project = session.get(models.Project, project_id)
+    if not project:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Project with id {project_id} is not available")
+    return project
 
-@router.patch('/prompts/{prompt_id}', response_model=models.PromptRead)
-def update_prompt(
+@router.patch('/projects/{project_id}', response_model=models.ProjectRead)
+def update_project(
     *,
     session: Session = Depends(database.get_session),
     current_user: models.User = Depends(oauth2.get_current_user),
-    prompt_id: int,
-    prompt: models.PromptUpdate
+    project_id: int,
+    project: models.ProjectUpdate
 ):
-    db_prompt = session.get(models.Prompt, prompt_id)
-    if not db_prompt:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Prompt with id {prompt_id} not found")
-    prompt_data = prompt.dict(exclude_unset=True)
-    for key, value in prompt_data.items():
-        setattr(db_prompt, key, value)
-    session.add(db_prompt)
+    db_project = session.get(models.Project, project_id)
+    if not db_project:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Project with id {project_id} not found")
+    project_data = project.dict(exclude_unset=True)
+    for key, value in project_data.items():
+        setattr(db_project, key, value)
+    session.add(db_project)
     session.commit()
-    session.refresh(db_prompt)
-    return db_prompt
+    session.refresh(db_project)
+    return db_project
 
-@router.delete('/prompts/{prompt_id}')
-def delete_prompt(
+@router.delete('/projects/{project_id}')
+def delete_project(
     *,
     session: Session = Depends(database.get_session),
     current_user: models.User = Depends(oauth2.get_current_user),
-    prompt_id: int,
+    project_id: int,
 ):
-    prompt = session.get(models.Prompt, prompt_id)
-    if not prompt:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Prompt with id {prompt_id} not found")
-    session.delete(prompt)
+    project = session.get(models.Project, project_id)
+    if not project:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Project with id {project_id} not found")
+    session.delete(project)
     session.commit()
-    return {'detail': f"Prompt with id {prompt_id} was deleted"}
+    return {'detail': f"Project with id {project_id} was deleted"}
 
 
 ###############################################################################
